@@ -7,13 +7,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-fun buyNow(context: Context, product: CartItem) {
+fun buyNow(context: Context, product: CartItem, onCheckoutReady: (List<List<String>>, List<List<String>>) -> Unit) {
     val db = CartDatabase.getDatabase(context)
     val repository = CartRepository(db)
 
     CoroutineScope(Dispatchers.IO).launch {
-        repository.clearCart() // Clear the cart after checkout
-    }
+        repository.addToCart(product) // Add the selected product to the cart
 
-    // Redirect to checkout page (to be implemented in UI)
+        val itemsTable = repository.getCartItems().map {
+            listOf(it.name, "x${it.quantity}", "${it.price * it.quantity} VND")
+        }
+        val summaryTable = repository.getOrderSummary()
+
+        // Callback to UI for navigation (to be implemented)
+        onCheckoutReady(itemsTable, summaryTable)
+    }
 }
