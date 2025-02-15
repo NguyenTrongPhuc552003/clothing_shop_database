@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">Clothing Shop Database</string>
+    <string name="tshirt_image">Tshirt Image</string>
+    <string name="coats">Coats</string>
+    <string name="pants_image">Pants Image</string>
+    <string name="pants">Pants</string>
+    <string name="allProducts_image">All Products Image</string>
+    <string name="allProducts">All product</string>
+    <string name="big_image">Big Image</string>
+    <string name="small_image">Small Image</string>
+    <string name="chillGuyImage">Chill Guy Image</string>
+    <string name="buy_now">Buy now!</string>
+    <string name="categories">Categories</string>
+    <string name="flame_image">Flame Image</string>
+    <string name="hot">HOT</string>
+    <string name="popular_product">Popular Product</string>
+    <string name="shop_logo">Shop Logo</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="shop_name">P2q STORE</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="search_anything_you_want_to_buy">Search anything you want to buy...</string>
 </resources>
