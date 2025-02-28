@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import com.example.clothingshopdatabase.data.DataResource
-import com.example.clothingshopdatabase.ui.screen.welcome.WelcomeScreen
+import com.example.clothingshopdatabase.ui.screens.WelcomeScreen
 import com.example.clothingshopdatabase.ui.theme.ClothingShopDatabaseTheme
 
 class MainActivity : ComponentActivity() {

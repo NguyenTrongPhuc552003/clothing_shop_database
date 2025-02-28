@@ -1,4 +1,4 @@
-package com.example.clothingshopdatabase.ui.screen.welcome
+package com.example.clothingshopdatabase.ui.screens
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -51,6 +51,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -74,41 +75,45 @@ fun WelcomeScreen(
             )
         }
     ) {
+        WelcomeContent(
+            modifier = Modifier.padding(it),
+            products = products
+        )
+    }
+}
+
+@Composable
+private fun WelcomeContent(
+    modifier: Modifier = Modifier,
+    products: List<Product>
+){
+    Column(modifier = modifier) {
         Column(
             modifier = Modifier
-                .padding(it)
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp
+                ),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(
-                            start = 16.dp,
-                            end = 16.dp
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    DiscountImageBox(
-                        onClick = {}
-                    )
-                    Text(
-                        text = stringResource(R.string.categories),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Categories()
-                    PopularProductTextRow()
-                }
-                PopularProduct(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    products = products
-                )
-            }
+            DiscountImageBox(
+                onClick = {}
+            )
+            Text(
+                text = stringResource(R.string.categories),
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Categories()
+            PopularProductTextRow()
         }
+        PopularProduct(
+            modifier = Modifier
+                .fillMaxWidth(),
+            products = products
+        )
     }
 }
 
@@ -221,16 +226,16 @@ fun CustomBottomBar(
                 quadraticBezierTo(0f, 0f, cornerRadius, 0f)
 
                 // Vẽ đến điểm bắt đầu của phần lõm
-                lineTo(width/2 - curveDiameter/2, 0f)
+                lineTo(width / 2 - curveDiameter / 2, 0f)
 
                 // Vẽ phần lõm
                 quadraticBezierTo(
-                    width/2, 0f,  // điểm điều khiển
-                    width/2, curveDepth  // điểm đích
+                    width / 2, 0f,  // điểm điều khiển
+                    width / 2, curveDepth  // điểm đích
                 )
                 quadraticBezierTo(
-                    width/2, 0f,  // điểm điều khiển
-                    width/2 + curveDiameter/2, 0f  // điểm đích
+                    width / 2, 0f,  // điểm điều khiển
+                    width / 2 + curveDiameter / 2, 0f  // điểm đích
                 )
 
                 // Vẽ đến góc phải
