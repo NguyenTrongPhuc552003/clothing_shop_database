@@ -54,19 +54,17 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.clothingshopdatabase.R
-import com.example.clothingshopdatabase.data.DataResource
 import com.example.clothingshopdatabase.model.Product
-import com.example.clothingshopdatabase.ui.theme.ClothingShopDatabaseTheme
 
 @Composable
 fun WelcomeScreen(
     onInformationClick: () -> Unit,
     onCartClick: () -> Unit,
     onHomeClick: () -> Unit,
+    onItemClick: () -> Unit,
     products: List<Product>
 ) {
     Scaffold(
@@ -81,7 +79,8 @@ fun WelcomeScreen(
     ) {
         WelcomeContent(
             modifier = Modifier.padding(it),
-            products = products
+            products = products,
+            onItemClick = onItemClick
         )
     }
 }
@@ -89,7 +88,8 @@ fun WelcomeScreen(
 @Composable
 private fun WelcomeContent(
     modifier: Modifier = Modifier,
-    products: List<Product>
+    products: List<Product>,
+    onItemClick: () -> Unit
 ) {
     Column(modifier = modifier) {
         Column(
@@ -116,7 +116,8 @@ private fun WelcomeContent(
         PopularProduct(
             modifier = Modifier
                 .fillMaxWidth(),
-            products = products
+            products = products,
+            onItemClick = onItemClick
         )
     }
 }
@@ -460,6 +461,7 @@ private fun CategoriesItem(
 @Composable
 private fun PopularProduct(
     products: List<Product>,
+    onItemClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(
@@ -479,6 +481,7 @@ private fun PopularProduct(
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .widthIn(max = 180.dp)
+                    .clickable { onItemClick() }
             ) {
                 PopularProductItem(product = it)
             }
