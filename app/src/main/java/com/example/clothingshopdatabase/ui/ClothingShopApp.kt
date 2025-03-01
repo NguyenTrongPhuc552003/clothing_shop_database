@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.clothingshopdatabase.ui.screens.InformationScreen
+import com.example.clothingshopdatabase.ui.screens.ProductScreen
 import com.example.clothingshopdatabase.ui.screens.WelcomeScreen
 
 @Composable
@@ -36,6 +37,11 @@ fun ClothingShopApp(
                     navHostController.navigateUp()
                 })
         }
+//        composable(route = ClothingShopScreen.Product.name) {
+//            ProductScreen(
+//
+//            )
+//        }
 
     }
 }

@@ -1,10 +1,10 @@
 package com.example.clothingshopdatabase.model
 
 enum class Size(val size: String) {
-    small(size = "S"),
-    medium(size = "M"),
-    large(size = "L"),
-    xlarge(size = "XL"),
-    x2large(size = "2XL"),
-    x3large(size = "3XL")
+    Small(size = "S"),
+    Medium(size = "M"),
+    Large(size = "L"),
+    XLarge(size = "XL"),
+    X2Large(size = "2XL"),
+    X3Large(size = "3XL")
 }

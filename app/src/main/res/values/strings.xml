@@ -27,4 +27,8 @@
     <string name="address">Address: 227 Nguyen Van Cu Street, Ward 4, District 5, Ho Chi Minh City</string>
     <string name="verified_stores">Verified Stores</string>
     <string name="shop_information">P2q Store Information</string>
+    <string name="product_iamge">Product Image\n</string>
+    <string name="size">Size:</string>
+    <string name="add_to_cart">"ADD TO CART "</string>
+    <string name="buy_now_button">BUY NOW</string>
 </resources>
