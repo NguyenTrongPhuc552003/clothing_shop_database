@@ -51,7 +51,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -65,13 +64,18 @@ import com.example.clothingshopdatabase.ui.theme.ClothingShopDatabaseTheme
 
 @Composable
 fun WelcomeScreen(
+    onInformationClick: () -> Unit,
+    onCartClick: () -> Unit,
+    onHomeClick: () -> Unit,
     products: List<Product>
 ) {
     Scaffold(
         topBar = { WelcomeTopBar() },
         bottomBar = {
             CustomBottomBar(
-                onHomeClick = {}
+                onInformationClick = onInformationClick,
+                onCartClick = onCartClick,
+                onHomeClick = onHomeClick
             )
         }
     ) {
@@ -86,7 +90,7 @@ fun WelcomeScreen(
 private fun WelcomeContent(
     modifier: Modifier = Modifier,
     products: List<Product>
-){
+) {
     Column(modifier = modifier) {
         Column(
             modifier = Modifier
@@ -198,6 +202,8 @@ private fun SearchBar() {
 
 @Composable
 fun CustomBottomBar(
+    onCartClick: () -> Unit,
+    onInformationClick: () -> Unit,
     onHomeClick: () -> Unit
 ) {
     Box(
@@ -223,24 +229,24 @@ fun CustomBottomBar(
 
                 // Vẽ đến góc trái trên
                 lineTo(0f, cornerRadius)
-                quadraticBezierTo(0f, 0f, cornerRadius, 0f)
+                quadraticTo(0f, 0f, cornerRadius, 0f)
 
                 // Vẽ đến điểm bắt đầu của phần lõm
                 lineTo(width / 2 - curveDiameter / 2, 0f)
 
                 // Vẽ phần lõm
-                quadraticBezierTo(
+                quadraticTo(
                     width / 2, 0f,  // điểm điều khiển
                     width / 2, curveDepth  // điểm đích
                 )
-                quadraticBezierTo(
+                quadraticTo(
                     width / 2, 0f,  // điểm điều khiển
                     width / 2 + curveDiameter / 2, 0f  // điểm đích
                 )
 
                 // Vẽ đến góc phải
                 lineTo(width - cornerRadius, 0f)
-                quadraticBezierTo(width, 0f, width, cornerRadius)
+                quadraticTo(width, 0f, width, cornerRadius)
 
                 // Hoàn thành path
                 lineTo(width, height)
@@ -269,7 +275,7 @@ fun CustomBottomBar(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.weight(1f)
                     ) {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = onCartClick) {
                             Icon(
                                 painter = painterResource(R.drawable.cart_32px),
                                 contentDescription = "Cart",
@@ -287,7 +293,7 @@ fun CustomBottomBar(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.weight(1f)
                     ) {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = onInformationClick) {
                             Icon(
                                 Icons.Default.Info,
                                 contentDescription = "About us",
@@ -538,16 +544,6 @@ private fun ImageBox(
                 .size(40.dp)
                 .align(Alignment.TopEnd)
                 .padding(8.dp)
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun PopularProductPreview() {
-    ClothingShopDatabaseTheme {
-        WelcomeScreen(
-            products = DataResource.products
         )
     }
 }
