@@ -1,5 +1,7 @@
 package com.example.clothingshopdatabase.clothing.management
 
+import com.example.clothingshopdatabase.model.Product
+
 object Repository {
     /*
     * A list of products.
@@ -14,12 +16,12 @@ object Repository {
     * - size: The size of the product (S, M, L, XL, or all).
     * */
     private val modelsLists = listOf (
-        Product(1, "T-shirt", "coats", 20.0, "https://www.example.com/tshirt.jpg", "A simple t-shirt", 10, "S"),
-        Product(2, "Jeans", "pants", 40.0, "https://www.example.com/jeans.jpg", "A pair of jeans", 5, "M"),
-        Product(3, "Sweater", "coats", 30.0, "https://www.example.com/sweater.jpg", "A cozy sweater", 7, "L"),
-        Product(4, "Shorts", "pants", 25.0, "https://www.example.com/shorts.jpg", "A pair of shorts", 3, "XL"),
-        Product(5, "Dress", "coats", 50.0, "https://www.example.com/dress.jpg", "A beautiful dress", 2, "S"),
-        Product(6, "Skirt", "pants", 35.0, "https://www.example.com/skirt.jpg", "A lovely skirt", 4, "M"),
+        Product(1, "T-shirt", "coats", 20, "https://www.example.com/tshirt.jpg", "A simple t-shirt", 10, "S"),
+        Product(2, "Jeans", "pants", 40, "https://www.example.com/jeans.jpg", "A pair of jeans", 5, "M"),
+        Product(3, "Sweater", "coats", 30, "https://www.example.com/sweater.jpg", "A cozy sweater", 7, "L"),
+        Product(4, "Shorts", "pants", 25, "https://www.example.com/shorts.jpg", "A pair of shorts", 3, "XL"),
+        Product(5, "Dress", "coats", 50, "https://www.example.com/dress.jpg", "A beautiful dress", 2, "S"),
+        Product(6, "Skirt", "pants", 35, "https://www.example.com/skirt.jpg", "A lovely skirt", 4, "M"),
     )
 
     /*
@@ -40,7 +42,7 @@ object Repository {
                         product.name,
                         product.category,
                         product.price,
-                        product.imageUrl,
+                        product.image,
                         "",
                         0,
                         ""

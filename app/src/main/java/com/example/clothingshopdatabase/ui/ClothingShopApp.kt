@@ -23,9 +23,10 @@ fun ClothingShopApp(
     ) {
         composable(route = ClothingShopScreen.Home.name) {
             WelcomeScreen(
-                products = uiState.products,
+                products = uiState.getProductsByCategory("all",true),
                 onCartClick = {},
                 onHomeClick = {},
+                onItemClick = {},
                 onInformationClick = {
                     navHostController.navigate(ClothingShopScreen.Information.name)
                 }
@@ -37,11 +38,12 @@ fun ClothingShopApp(
                     navHostController.navigateUp()
                 })
         }
-//        composable(route = ClothingShopScreen.Product.name) {
-//            ProductScreen(
-//
-//            )
-//        }
+        composable(route = ClothingShopScreen.Product.name + "/{productId}") {
+            val productId = it.arguments?.getString("productId")?.toIntOrNull()
+            ProductScreen(
+
+            )
+        }
 
     }
 }

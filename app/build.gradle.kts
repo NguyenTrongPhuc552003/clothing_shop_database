@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.devtools.ksp") version "1.5.30-1.0.0"
+    id("kotlin-kapt")
+    id("com.google.devtools.ksp") version "2.1.10-1.0.30"
 }
 
 android {
@@ -56,6 +57,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-viewmodel-compose
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.gson)
+    implementation(libs.glide)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -64,7 +67,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Room Database
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.room.compiler)
 
-    implementation(libs.gson)
-    implementation(libs.glide)
+    // Nếu dùng Kotlin, thay annotationProcessor bằng kapt:
+    kapt(libs.room.compiler)
+
+    // Room với Coroutine (nếu dùng Flow)
+    implementation(libs.androidx.room.ktx)
 }

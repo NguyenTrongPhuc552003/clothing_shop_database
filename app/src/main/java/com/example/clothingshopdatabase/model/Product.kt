@@ -4,17 +4,17 @@ import androidx.annotation.DrawableRes
 import java.text.NumberFormat
 import java.util.Locale
 
-data class Product(
-    val id: Int,
-    val name: String,
-    val description: String,
-    @DrawableRes val image: Int,
-    val price: Int,
-    val size: List<Size>
+class Product(
+    val id: Int = 0,
+    val name: String = "",
+    val category: String = "", // coats, pants, or all products
+    val price: Int = 0,
+    val image: String,
+    val description: String = "",
+    val stock: Int = 0,
+    val size: String = "" // S, M, L, XL, or all sizes
 ){
     fun formatPrice(): String{
         return NumberFormat.getNumberInstance(Locale("vi","VN")).format(price)
     }
 }
-
-

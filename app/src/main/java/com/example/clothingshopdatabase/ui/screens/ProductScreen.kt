@@ -277,9 +277,9 @@ fun P() {
         ProductScreen(
             product =
             Product(
-                1,
-                "T1 World Champions 2024 T-Shirt",
-                "Celebrate T1's historic victory at Worlds 2024" +
+                id = 1,
+                name = "T1 World Champions 2024 T-Shirt",
+                description = "Celebrate T1's historic victory at Worlds 2024" +
                         " with this limited-edition T-shirt! Made from premium" +
                         " cotton, it offers maximum comfort for everyday wear." +
                         " The front features the iconic T1 logo along with the" +
@@ -314,9 +314,8 @@ fun P() {
                         " must-have for any true fan. Don't miss out on the " +
                         "chance to own a piece of esports history and show your" +
                         " support for T1!",
-                R.drawable.t1_2024_t_shirt_wchampions,
-                1000000,
-                listOf(Size.Small, Size.Medium, Size.Large, Size.XLarge, Size.X2Large, Size.X3Large)
+                image = R.drawable.t1_2024_t_shirt_wchampions,
+                price = 1000000
             ),
             onBackClick = {},
             onAddToCartClick = {},
