@@ -1,6 +1,5 @@
 package com.example.clothingshopdatabase.model
 
-import androidx.annotation.DrawableRes
 import java.text.NumberFormat
 import java.util.Locale
 
