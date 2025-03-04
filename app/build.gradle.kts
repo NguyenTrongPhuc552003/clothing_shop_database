@@ -72,7 +72,7 @@ dependencies {
     annotationProcessor(libs.room.compiler)
 
     // Nếu dùng Kotlin, thay annotationProcessor bằng kapt:
-    kapt(libs.room.compiler)
+    ksp(libs.room.compiler)
 
     // Room với Coroutine (nếu dùng Flow)
     implementation(libs.androidx.room.ktx)
