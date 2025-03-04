@@ -26,6 +26,7 @@ fun ClothingShopApp(
                 products = uiState.products,
                 onCartClick = {},
                 onHomeClick = {},
+                onItemClick = {},
                 onInformationClick = {
                     navHostController.navigate(ClothingShopScreen.Information.name)
                 }
@@ -37,11 +38,12 @@ fun ClothingShopApp(
                     navHostController.navigateUp()
                 })
         }
-//        composable(route = ClothingShopScreen.Product.name) {
+        composable(route = ClothingShopScreen.Product.name + "/{productId}") {
+            val productId = it.arguments?.getString("productId")
 //            ProductScreen(
 //
 //            )
-//        }
+        }
 
     }
 }

@@ -10,10 +10,15 @@ data class Product(
     val description: String,
     @DrawableRes val image: Int,
     val price: Int,
-    val size: List<Size>
-){
-    fun formatPrice(): String{
-        return NumberFormat.getNumberInstance(Locale("vi","VN")).format(price)
+    val stock: Int = 1,
+    val totalPrice: Int = price * stock,
+    val size: String = ""
+) {
+    fun formatPrice(): String {
+        return NumberFormat.getNumberInstance(Locale("vi", "VN")).format(price)
+    }
+    fun formatTotalPrice(): String {
+        return NumberFormat.getNumberInstance(Locale("vi", "VN")).format(totalPrice)
     }
 }
 

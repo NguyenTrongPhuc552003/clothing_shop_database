@@ -232,10 +232,11 @@ fun SizeBox(
     Box(
         modifier = modifier
             .wrapContentSize()
-            .background(Color(0xffE9E9E9)),
+            .background(Color(0xffCCCCCC)),
     ) {
         Text(
             text = size,
+            fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 4.dp)
         )
     }
@@ -316,7 +317,7 @@ fun P() {
                         " support for T1!",
                 R.drawable.t1_2024_t_shirt_wchampions,
                 1000000,
-                listOf(Size.Small, Size.Medium, Size.Large, Size.XLarge, Size.X2Large, Size.X3Large)
+//                listOf(Size.Small, Size.Medium, Size.Large, Size.XLarge, Size.X2Large, Size.X3Large)
             ),
             onBackClick = {},
             onAddToCartClick = {},
