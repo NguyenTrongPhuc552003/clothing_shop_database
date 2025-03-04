@@ -23,7 +23,7 @@ fun ClothingShopApp(
     ) {
         composable(route = ClothingShopScreen.Home.name) {
             WelcomeScreen(
-                products = uiState.getProductsByCategory("all",true),
+                products = uiState.products,
                 onCartClick = {},
                 onHomeClick = {},
                 onItemClick = {},
@@ -39,10 +39,10 @@ fun ClothingShopApp(
                 })
         }
         composable(route = ClothingShopScreen.Product.name + "/{productId}") {
-            val productId = it.arguments?.getString("productId")?.toIntOrNull()
-            ProductScreen(
-
-            )
+            val productId = it.arguments?.getString("productId")
+//            ProductScreen(
+//
+//            )
         }
 
     }
