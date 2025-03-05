@@ -1,49 +1,49 @@
 package com.example.clothingshopdatabase
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import com.example.clothingshopdatabase.checkout.options.addToCart
-import com.example.clothingshopdatabase.database.cart.CartDatabase
-import com.example.clothingshopdatabase.database.cart.CartRepository
-import kotlinx.coroutines.CoroutineScope
+import androidx.lifecycle.lifecycleScope
+import com.example.clothingshopdatabase.data.CartDatabase
+import com.example.clothingshopdatabase.data.CartItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.io.InputStream
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val context = this
-
-        // Read and parse the JSON file
-        val inputStream: InputStream = assets.open("clothings-database.json")
-        val jsonString = inputStream.bufferedReader().use { it.readText() }
-        val jsonObject = JSONObject(jsonString)
-        val productsArray = jsonObject.getJSONArray("sheet")
-
-        // Test backend functions for each product
-        CoroutineScope(Dispatchers.IO).launch {
-            for (i in 0 until productsArray.length()) {
-                val product = productsArray.getJSONObject(i)
-                val name = product.getString("name")
-                val price = product.getString("price").replace(".", "").replace(" VND", "").toDouble()
-                val imageUrl = product.getString("image")
-
-                addToCart(context, i + 1, name, price, imageUrl)
-                println("Product added to cart: $name")
-
-                // Test getCartItems function
-                val db = CartDatabase.getDatabase(context)
-                val repository = CartRepository(db)
-                val cartItems = repository.getCartItems()
-                println("Cart Items: $cartItems")
-
-                // Test getOrderSummary function
-                val orderSummary = repository.getOrderSummary()
-                println("Order Summary: $orderSummary")
-            }
+        lifecycleScope.launch(Dispatchers.IO) {
+            val db = CartDatabase.getDatabase(applicationContext).cartDao()
+            val jsonString =
+                readJsonFromAssets(applicationContext, "updated_clothings_database.json")
+            val clothes = parseJson(jsonString)
+            db.addToCart(clothes)
         }
     }
+
+    fun readJsonFromAssets(context: Context, fileName: String): String {
+        return context.assets.open(fileName).bufferedReader().use { it.readText() }
+    }
+
+    fun parseJson(json: String): List<CartItem> {
+        val jsonObject = JSONObject(json)
+        val jsonArray = jsonObject.getJSONArray("sheet")
+        val itemList = mutableListOf<CartItem>()
+
+        for (i in 0 until jsonArray.length()) {
+            val item = jsonArray.getJSONObject(i)
+            itemList.add(
+                CartItem(
+                    name = item.getString("name"),
+                    price = item.getInt("price"),
+                    description = item.getString("description"),
+                    image = item.getString("image"),
+                    category = item.getString("category")
+                )
+            )
+        }
+        return itemList
+    }
+
 }

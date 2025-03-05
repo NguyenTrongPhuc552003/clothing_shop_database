@@ -6,8 +6,9 @@ import java.util.Locale
 data class Product(
     val id: Int,
     val name: String,
+    val category: String,
     val description: String,
-    @DrawableRes val image: Int,
+    val image: String,
     val price: Int,
     val stock: Int = 1,
     val totalPrice: Int = price * stock,

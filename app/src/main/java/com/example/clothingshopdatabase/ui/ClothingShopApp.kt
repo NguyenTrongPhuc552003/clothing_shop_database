@@ -40,9 +40,9 @@ fun ClothingShopApp(
         }
         composable(route = ClothingShopScreen.Product.name + "/{productId}") {
             val productId = it.arguments?.getString("productId")
-//            ProductScreen(
-//
-//            )
+            ProductScreen(
+
+            )
         }
 
     }
