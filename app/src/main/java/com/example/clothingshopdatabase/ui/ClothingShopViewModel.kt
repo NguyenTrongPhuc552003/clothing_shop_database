@@ -18,7 +18,7 @@ import org.json.JSONObject
 const val DELIVERY = 30000
 
 data class ClothingShopViewModelData(
-    val cartList: List<Product>? = null
+    val cartList: List<Product>? = emptyList()
 )
 
 class ClothingShopAppViewModelFactory(private val dao: DataAccessObject) :
@@ -56,18 +56,25 @@ class ClothingShopViewModel(private val dao: DataAccessObject) : ViewModel() {
         val checkExist = _uiState.value.cartList?.find {
             it.id == product.id && it.size == product.size
         }
+        Log.d("checkExist",checkExist.toString())
         val updateCart = _uiState.value.cartList?.toMutableList()
+        Log.d("updateCart",updateCart.toString())
         if (checkExist != null) {
-            val updateProduct = checkExist.copy(stock = checkExist.stock + 1)
-            updateCart?.set(updateCart.indexOf(updateProduct), updateProduct)
+            updateCart?.set(
+                updateCart.indexOf(checkExist),
+                checkExist.copy(stock = checkExist.stock + 1)
+            )
         } else
             updateCart?.add(product)
+        Log.d("updateCart",updateCart.toString())
         _uiState.value = _uiState.value.copy(cartList = updateCart)
+        Log.d("Size",_uiState.value.cartList.toString())
     }
 
-    fun addProducts(){
+    fun findProductByCategory(category: String) =
+        getProducts().map {
 
-    }
+        }
 
     fun findProductById(productId: Int?) = dao.getCartItemById(productId).map { cartItem ->
         cartItem?.let {

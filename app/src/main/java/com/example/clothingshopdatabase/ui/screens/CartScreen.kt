@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -60,6 +62,8 @@ fun CartScreen(
     totalPrice: String,
     departurePoint: String,
     destination: String,
+    onAddItemClick: () -> Unit,
+    onRemoveItemClick: () -> Unit,
     onOrderClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -96,6 +100,8 @@ fun CartScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ItemList(
+                onAddItemClick = onAddItemClick,
+                onRemoveItemClick = onRemoveItemClick,
                 products = products
             )
             Text(
@@ -269,7 +275,7 @@ fun OrderSummary(
                         text = totalQuantity
                     )
                     Text(
-                        text = if (!totalQuantity.equals("0")) delivery else "0"
+                        text = if (totalQuantity != "0") delivery else "0"
                     )
                 }
             }
@@ -287,7 +293,7 @@ fun OrderSummary(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = totalPrice,
+                    text = if (totalQuantity != "0") totalPrice else "0",
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -297,29 +303,49 @@ fun OrderSummary(
 
 @Composable
 fun ItemList(
+    onAddItemClick: () -> Unit,
+    onRemoveItemClick:() -> Unit,
     products: List<Product>,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(max = 400.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .height(230.dp),
     ) {
-        items(products) {
-            Item(
-                image = it.image,
-                name = it.name,
-                price = it.formatPrice(),
-                size = it.size,
-                stock = it.stock,
-                totalPrice = it.formatTotalPrice(),
-                onSubtractStockClick = {},
-                onAddStockClick = {},
-            )
-        }
+        if (products.isNotEmpty())
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+
+                items(products) {
+                    Item(
+                        image = it.image,
+                        name = it.name,
+                        price = it.formatPrice(),
+                        size = it.size,
+                        stock = it.stock,
+                        totalPrice = it.formatTotalPrice(),
+                        onSubtractStockClick = onRemoveItemClick,
+                        onAddStockClick = onAddItemClick,
+                    )
+                }
+            }
+        else
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.download_removebg_preview),
+                    contentDescription = null,
+                    modifier = Modifier.size(150.dp)
+                )
+            }
     }
 }
+
 
 @Composable
 fun Item(
@@ -350,7 +376,7 @@ fun Item(
         ) {
             AsyncImage(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .size(70.dp),
                 model = ImageRequest.Builder(context = LocalContext.current)
                     .data(image)
                     .crossfade(true)
@@ -444,6 +470,25 @@ fun StockButton(
                 tint = Color.Black
             )
         }
+    }
+}
+
+@Composable
+fun SizeBox(
+    size: String,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .wrapContentSize()
+            .background(Color(0xffCCCCCC))
+    ) {
+        Text(
+            text = size,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = 4.dp),
+            color = Color.Black
+        )
     }
 }
 

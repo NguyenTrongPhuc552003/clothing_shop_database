@@ -73,6 +73,9 @@ fun WelcomeScreen(
     onCartClick: () -> Unit,
     onHomeClick: () -> Unit,
     onItemClick: (Int) -> Unit,
+    onAllClick: () -> Unit,
+    onTrousersClick: () -> Unit,
+    onShirtClick: () -> Unit,
     products: List<Product>
 ) {
     Scaffold(
@@ -88,13 +91,19 @@ fun WelcomeScreen(
         WelcomeContent(
             modifier = Modifier.padding(it),
             products = products,
-            onItemClick = onItemClick
+            onItemClick = onItemClick,
+            onTrousersClick = onTrousersClick,
+            onShirtClick = onShirtClick,
+            onAllClick = onAllClick
         )
     }
 }
 
 @Composable
 private fun WelcomeContent(
+    onShirtClick: () -> Unit,
+    onTrousersClick: () -> Unit,
+    onAllClick: () -> Unit,
     modifier: Modifier = Modifier,
     products: List<Product>,
     onItemClick: (Int) -> Unit
@@ -117,7 +126,11 @@ private fun WelcomeContent(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
-            Categories()
+            Categories(
+                onShirtClick = onShirtClick,
+                onTrousersClick = onTrousersClick,
+                onAllClick = onAllClick
+            )
             PopularProductTextRow()
         }
         PopularProduct(
@@ -412,6 +425,9 @@ private fun DiscountImageBox(
 
 @Composable
 private fun Categories(
+    onShirtClick: () -> Unit,
+    onTrousersClick: () -> Unit,
+    onAllClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -423,19 +439,19 @@ private fun Categories(
             image = R.drawable.tshirt_32px,
             imageDescription = R.string.tshirt_image,
             itemName = R.string.coats,
-            onClick = {}
+            onClick = onShirtClick
         )
         CategoriesItem(
             image = R.drawable.pants_32px,
             imageDescription = R.string.pants_image,
             itemName = R.string.pants,
-            onClick = {}
+            onClick = onTrousersClick
         )
         CategoriesItem(
             image = R.drawable.all_32px,
             imageDescription = R.string.allProducts_image,
             itemName = R.string.allProducts,
-            onClick = {}
+            onClick = onAllClick
         )
     }
 }
@@ -497,7 +513,7 @@ private fun PopularProduct(
 }
 
 @Composable
-private fun PopularProductItem(
+fun PopularProductItem(
     product: Product,
     modifier: Modifier = Modifier
 ) {
@@ -513,14 +529,15 @@ private fun PopularProductItem(
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             color = Color(0xA82F2D2D),
+            onTextLayout = { textLayoutResult ->
+                isSingleLine = textLayoutResult.lineCount == 1
+            },
             modifier = Modifier
                 .padding(
                     start = 16.dp,
-                    end = if (isSingleLine) 16.dp else 32.dp // Thay đổi padding dựa trên số dòng
-                ),
-            onTextLayout =  { textLayoutResult ->
-                    isSingleLine = textLayoutResult.lineCount == 1
-                }
+                    end = 16.dp,
+                    bottom = if (isSingleLine) 28.dp else 8.dp// Thay đổi padding dựa trên số dòng
+                )
         )
         Text(
             text = "${product.formatPrice()}đ",
@@ -528,7 +545,6 @@ private fun PopularProductItem(
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .padding(
-                    top = 8.dp,
                     start = 16.dp,
                     end = 16.dp
                 )

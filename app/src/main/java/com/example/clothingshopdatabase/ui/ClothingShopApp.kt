@@ -13,6 +13,7 @@ import com.example.clothingshopdatabase.model.Product
 import com.example.clothingshopdatabase.ui.screens.CartScreen
 import com.example.clothingshopdatabase.ui.screens.InformationScreen
 import com.example.clothingshopdatabase.ui.screens.ProductScreen
+import com.example.clothingshopdatabase.ui.screens.ShowProductsScreen
 import com.example.clothingshopdatabase.ui.screens.WelcomeScreen
 
 @Composable
@@ -29,17 +30,20 @@ fun ClothingShopApp(
         composable(route = ClothingShopScreen.Home.name) {
             WelcomeScreen(
                 products = products,
-                onCartClick = {navHostController.navigate(ClothingShopScreen.Cart.name)},
+                onCartClick = { navHostController.navigate(ClothingShopScreen.Cart.name) },
                 onHomeClick = {},
                 onItemClick = { productId: Int ->
-                    Log.d("productID",productId.toString())
+                    Log.d("productID", productId.toString())
                     navHostController.navigate(
                         ClothingShopScreen.Product.name + "/$productId"
                     )
                 },
                 onInformationClick = {
                     navHostController.navigate(ClothingShopScreen.Information.name)
-                }
+                },
+                onTrousersClick = { navHostController.navigate(ClothingShopScreen.Show.name + "/trousers") },
+                onShirtClick = { navHostController.navigate(ClothingShopScreen.Show.name + "/shirt") },
+                onAllClick = { navHostController.navigate(ClothingShopScreen.Show.name + "/all") }
             )
         }
         composable(route = ClothingShopScreen.Information.name) {
@@ -50,7 +54,7 @@ fun ClothingShopApp(
         }
         composable(route = ClothingShopScreen.Product.name + "/{productId}") {
             val productId = it.arguments?.getString("productId")
-            Log.d("productID2",productId.toString())
+            Log.d("productID2", productId.toString())
             val product by viewModel.findProductById(productId?.toInt())
                 .collectAsState(
                     initial =
@@ -58,9 +62,17 @@ fun ClothingShopApp(
                 )
             ProductScreen(
                 product = product,
-                onAddToCartClick = {},
+                onAddToCartClick = {
+                    if (it != null)
+                        viewModel.addToCart(
+                            product.copy(
+                                size = it.size
+                            )
+                        )
+                    navHostController.navigateUp()
+                },
                 onBackClick = { navHostController.navigateUp() },
-                onBuyNowClick = {}
+                onBuyNowClick = { navHostController.navigate(ClothingShopScreen.Cart.name) }
             )
         }
         composable(route = ClothingShopScreen.Cart.name) {
@@ -73,8 +85,48 @@ fun ClothingShopApp(
                 departurePoint = "Hwang Gyeol",
                 destination = "227 Nguyen Trai Street, W4, D5, HCM City",
                 onOrderClick = {},
-                onBackClick = { navHostController.navigateUp() }
+                onBackClick = { navHostController.navigateUp() },
+                onAddItemClick = {},
+                onRemoveItemClick = {}
             )
         }
+        composable(route = ClothingShopScreen.Show.name + "/{category}") {
+            val category = it.arguments?.getString("category")
+            if (category != null)
+                if (category != "all")
+                    ShowProductsScreen(
+                        onItemClick = { productId: Int ->
+                            Log.d("productID", productId.toString())
+                            navHostController.navigate(
+                                ClothingShopScreen.Product.name + "/$productId"
+                            )
+                        },
+                        onBackClick = { navHostController.navigateUp() },
+                        products = getProductsByCategory(products, category)
+                    )
+                else
+                    ShowProductsScreen(
+                        onItemClick = { productId: Int ->
+                            Log.d("productID", productId.toString())
+                            navHostController.navigate(
+                                ClothingShopScreen.Product.name + "/$productId"
+                            )
+                        },
+                        onBackClick = { navHostController.navigateUp() },
+                        products = products
+                    )
+        }
+
     }
+
 }
+
+fun getProductsByCategory(
+    products: List<Product>,
+    category: String
+) =
+    products.filter {
+        it.category == category
+    }
+
+

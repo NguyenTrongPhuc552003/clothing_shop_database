@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                 viewModel(factory = ClothingShopAppViewModelFactory(dao))
             val navController = rememberNavController()
 //            viewModel.loadDataFromJson(this)
-            ClothingShopDatabaseTheme {
+            ClothingShopDatabaseTheme(darkTheme = false) {
                 ClothingShopApp(
                     viewModel = viewModel,
                     navHostController = navController

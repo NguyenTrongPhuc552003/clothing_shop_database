@@ -3,6 +3,7 @@ package com.example.clothingshopdatabase.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -27,6 +29,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,7 +44,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -46,57 +51,71 @@ import coil.request.ImageRequest
 import com.example.clothingshopdatabase.R
 import com.example.clothingshopdatabase.model.Product
 import com.example.clothingshopdatabase.model.Size
-import com.example.clothingshopdatabase.ui.theme.ClothingShopDatabaseTheme
 
 @Composable
 fun ProductScreen(
     product: Product,
-    onAddToCartClick: () -> Unit,
-    onBuyNowClick: () -> Unit,
+    onAddToCartClick: (Size?) -> Unit,
+    onBuyNowClick: (Size?) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var selectedSize by remember { mutableStateOf<Size?>(null) }
     Scaffold(
         topBar = {
             ProductTopAppBar(
                 onBackClick = onBackClick
             )
+        },
+        bottomBar = {
+            BottomAppBar {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 50.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    ProductButton(
+                        modifier = Modifier.weight(1f),
+                        title = stringResource(R.string.add_to_cart),
+                        gradientColors = listOf(Color(0xffC4BBBB), Color(0xff504F4F)),
+                        onAddToCartClick = { onAddToCartClick(selectedSize) }
+                    )
+                    ProductButton(
+                        modifier = Modifier.weight(1f),
+                        title = stringResource(R.string.buy_now_button),
+                        gradientColors = listOf(Color(0xff15B8B8), Color(0xff0F33E4)),
+                        onAddToCartClick = { onBuyNowClick(selectedSize) }
+                    )
+                }
+            }
         }
     ) {
         Column(
             modifier = modifier
                 .padding(it)
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp),
+                .padding(bottom = 16.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            ProductImage(product.image)
-            ProductNameAndPrice(product.name, product.formatPrice())
-            HorizontalDivider(
-                thickness = 1.dp,
-                color = Color(0xffE9E9E9)
-            )
-            Description(
-                product.description
-            )
-            SizeList()
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            Column(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                ProductButton(
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(R.string.add_to_cart),
-                    gradientColors = listOf(Color(0xffC4BBBB), Color(0xff504F4F)),
-                    onAddToCartClick = onAddToCartClick
+                ProductImage(product.image)
+                ProductNameAndPrice(product.name, product.formatPrice())
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = Color(0xffE9E9E9)
                 )
-                ProductButton(
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(R.string.buy_now_button),
-                    gradientColors = listOf(Color(0xff15B8B8), Color(0xff0F33E4)),
-                    onAddToCartClick = onBuyNowClick
+                Description(
+                    product.description
                 )
             }
+            SizeList(
+                selectedSize = selectedSize,
+                onSizeClick = { size -> selectedSize = size }
+            )
         }
     }
 }
@@ -213,6 +232,8 @@ fun ProductTopAppBar(
 
 @Composable
 fun SizeList(
+    selectedSize: Size?,
+    onSizeClick: (Size) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -223,29 +244,66 @@ fun SizeList(
         Text(
             text = stringResource(R.string.size)
         )
-        SizeBox(Size.Small.size)
-        SizeBox(Size.Medium.size)
-        SizeBox(Size.Large.size)
-        SizeBox(Size.XLarge.size)
-        SizeBox(Size.X2Large.size)
-        SizeBox(Size.X3Large.size)
+        SizeBox(
+            isSelectedSize = selectedSize == Size.Small,
+            onClick = {
+                onSizeClick(Size.Small)
+            },
+            size = Size.Small.size
+        )
+        SizeBox(
+            isSelectedSize = selectedSize == Size.Medium,
+            onClick = { onSizeClick(Size.Medium) },
+            size = Size.Medium.size
+        )
+        SizeBox(
+            isSelectedSize = selectedSize == Size.Large,
+            onClick = { onSizeClick(Size.Large) },
+            size = Size.Large.size
+        )
+        SizeBox(
+            isSelectedSize = selectedSize == Size.XLarge,
+            onClick = { onSizeClick(Size.XLarge) },
+            size = Size.XLarge.size
+        )
+        SizeBox(
+            isSelectedSize = selectedSize == Size.X2Large,
+            onClick = { onSizeClick(Size.X2Large) },
+            size = Size.X2Large.size
+        )
+        SizeBox(
+            isSelectedSize = selectedSize == Size.X3Large,
+            onClick = { onSizeClick(Size.X3Large) },
+            size = Size.X3Large.size
+        )
     }
 }
 
 @Composable
 fun SizeBox(
+    onClick: () -> Unit,
+    isSelectedSize: Boolean,
     size: String,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier = modifier
             .wrapContentSize()
-            .background(Color(0xffCCCCCC)),
+            .background(if (isSelectedSize) Color(0xFF14AEBA) else Color(0xffCCCCCC))
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = {
+                    onClick()
+                }
+            ),
     ) {
         Text(
             text = size,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 4.dp)
+            modifier = Modifier.padding(horizontal = 4.dp),
+            color = if (isSelectedSize) Color.White else Color.Black
         )
     }
 }
