@@ -1,49 +1,34 @@
 package com.example.clothingshopdatabase
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.example.clothingshopdatabase.data.CartDatabase
-import com.example.clothingshopdatabase.data.CartItem
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.json.JSONObject
+import com.example.clothingshopdatabase.ui.ClothingShopApp
+import com.example.clothingshopdatabase.ui.ClothingShopAppViewModelFactory
+import com.example.clothingshopdatabase.ui.ClothingShopViewModel
+import com.example.clothingshopdatabase.ui.theme.ClothingShopDatabaseTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch(Dispatchers.IO) {
-            val db = CartDatabase.getDatabase(applicationContext).cartDao()
-            val jsonString =
-                readJsonFromAssets(applicationContext, "updated_clothings_database.json")
-            val clothes = parseJson(jsonString)
-            db.addToCart(clothes)
-        }
-    }
-
-    fun readJsonFromAssets(context: Context, fileName: String): String {
-        return context.assets.open(fileName).bufferedReader().use { it.readText() }
-    }
-
-    fun parseJson(json: String): List<CartItem> {
-        val jsonObject = JSONObject(json)
-        val jsonArray = jsonObject.getJSONArray("sheet")
-        val itemList = mutableListOf<CartItem>()
-
-        for (i in 0 until jsonArray.length()) {
-            val item = jsonArray.getJSONObject(i)
-            itemList.add(
-                CartItem(
-                    name = item.getString("name"),
-                    price = item.getInt("price"),
-                    description = item.getString("description"),
-                    image = item.getString("image"),
-                    category = item.getString("category")
+        setContent {
+            val context = LocalContext.current
+            val dao = remember { CartDatabase.getDatabase(context).cartDao() }
+            val viewModel: ClothingShopViewModel =
+                viewModel(factory = ClothingShopAppViewModelFactory(dao))
+            val navController = rememberNavController()
+//            viewModel.loadDataFromJson(this)
+            ClothingShopDatabaseTheme {
+                ClothingShopApp(
+                    viewModel = viewModel,
+                    navHostController = navController
                 )
-            )
+            }
         }
-        return itemList
     }
-
 }

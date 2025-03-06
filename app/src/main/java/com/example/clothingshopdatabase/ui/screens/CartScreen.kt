@@ -1,6 +1,5 @@
 package com.example.clothingshopdatabase.ui.screens
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,18 +38,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.clothingshopdatabase.R
-import com.example.clothingshopdatabase.data.DataResource
 import com.example.clothingshopdatabase.model.Product
-import com.example.clothingshopdatabase.ui.theme.ClothingShopDatabaseTheme
 
 @Composable
 fun CartScreen(
@@ -270,7 +269,7 @@ fun OrderSummary(
                         text = totalQuantity
                     )
                     Text(
-                        text = delivery
+                        text = if (!totalQuantity.equals("0")) delivery else "0"
                     )
                 }
             }
@@ -309,7 +308,7 @@ fun ItemList(
     ) {
         items(products) {
             Item(
-                drawableRes = it.image,
+                image = it.image,
                 name = it.name,
                 price = it.formatPrice(),
                 size = it.size,
@@ -324,7 +323,7 @@ fun ItemList(
 
 @Composable
 fun Item(
-    @DrawableRes drawableRes: Int,
+    image: String,
     name: String,
     price: String,
     size: String,
@@ -349,10 +348,16 @@ fun Item(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Image(
-                painter = painterResource(drawableRes),
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxSize(),
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(image)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = null,
-                modifier = Modifier.size(70.dp)
+                error = painterResource(R.drawable.ic_broken_image),
+                placeholder = painterResource(R.drawable.loading_img)
             )
             Column {
                 Text(
@@ -442,20 +447,20 @@ fun StockButton(
     }
 }
 
-@Preview
-@Composable
-fun MyPreview() {
-    MaterialTheme {
-        CartScreen(
-            products = DataResource.products,
-            subTotal = "VNĐ 0",
-            totalQuantity = "0",
-            delivery = "VNĐ 0",
-            totalPrice = "VNĐ 0",
-            departurePoint = "Hwang Gyeol",
-            destination = "227 Nguyen Trai Street, W4, D5, HCM City",
-            onOrderClick = {},
-            onBackClick = {}
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun MyPreview() {
+//    MaterialTheme {
+//        CartScreen(
+//            products = DataResource.products,
+//            subTotal = "VNĐ 0",
+//            totalQuantity = "0",
+//            delivery = "VNĐ 0",
+//            totalPrice = "VNĐ 0",
+//            departurePoint = "Hwang Gyeol",
+//            destination = "227 Nguyen Trai Street, W4, D5, HCM City",
+//            onOrderClick = {},
+//            onBackClick = {}
+//        )
+//    }
+//}

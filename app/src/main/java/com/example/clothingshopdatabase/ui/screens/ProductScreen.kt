@@ -1,6 +1,5 @@
 package com.example.clothingshopdatabase.ui.screens
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -40,6 +41,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.clothingshopdatabase.R
 import com.example.clothingshopdatabase.model.Product
 import com.example.clothingshopdatabase.model.Size
@@ -106,7 +109,7 @@ private fun Description(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(max = 300.dp),
+            .height(320.dp),
     ) {
         Text(
             text = stringResource(R.string.description),
@@ -157,7 +160,7 @@ private fun ProductNameAndPrice(
 
 @Composable
 private fun ProductImage(
-    @DrawableRes drawableRes: Int,
+    image: String,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -168,14 +171,19 @@ private fun ProductImage(
             .background(Color(0xffE9E9E9)),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(drawableRes),
-            contentDescription = stringResource(R.string.product_iamge),
+        AsyncImage(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(
                     vertical = 8.dp
-                )
+                ),
+            model = ImageRequest.Builder(context = LocalContext.current)
+                .data(image)
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            error = painterResource(R.drawable.ic_broken_image),
+            placeholder = painterResource(R.drawable.loading_img)
         )
     }
 }
@@ -271,57 +279,57 @@ fun ProductButton(
     }
 }
 
-@Preview
-@Composable
-fun P() {
-    ClothingShopDatabaseTheme(darkTheme = false) {
-        ProductScreen(
-            product =
-            Product(
-                1,
-                "T1 World Champions 2024 T-Shirt",
-                "Celebrate T1's historic victory at Worlds 2024" +
-                        " with this limited-edition T-shirt! Made from premium" +
-                        " cotton, it offers maximum comfort for everyday wear." +
-                        " The front features the iconic T1 logo along with the" +
-                        " bold \"World Champions 2024\" text, making it a" +
-                        " must-have for any true fan. Don't miss out on the " +
-                        "chance to own a piece of esports history and show your" +
-                        " support for T1!" +
-                        "T1 World Champions 2024 T-Shirt" +
-                        "Celebrate T1's historic victory at Worlds 2024" +
-                        " with this limited-edition T-shirt! Made from premium" +
-                        " cotton, it offers maximum comfort for everyday wear." +
-                        " The front features the iconic T1 logo along with the" +
-                        " bold \"World Champions 2024\" text, making it a" +
-                        " must-have for any true fan. Don't miss out on the " +
-                        "chance to own a piece of esports history and show your" +
-                        " support for T1!" +
-                        "T1 World Champions 2024 T-Shirt" +
-                        "Celebrate T1's historic victory at Worlds 2024" +
-                        " with this limited-edition T-shirt! Made from premium" +
-                        " cotton, it offers maximum comfort for everyday wear." +
-                        " The front features the iconic T1 logo along with the" +
-                        " bold \"World Champions 2024\" text, making it a" +
-                        " must-have for any true fan. Don't miss out on the " +
-                        "chance to own a piece of esports history and show your" +
-                        " support for T1!" +
-                        "T1 World Champions 2024 T-Shirt" +
-                        "Celebrate T1's historic victory at Worlds 2024" +
-                        " with this limited-edition T-shirt! Made from premium" +
-                        " cotton, it offers maximum comfort for everyday wear." +
-                        " The front features the iconic T1 logo along with the" +
-                        " bold \"World Champions 2024\" text, making it a" +
-                        " must-have for any true fan. Don't miss out on the " +
-                        "chance to own a piece of esports history and show your" +
-                        " support for T1!",
-                R.drawable.t1_2024_t_shirt_wchampions,
-                1000000,
-//                listOf(Size.Small, Size.Medium, Size.Large, Size.XLarge, Size.X2Large, Size.X3Large)
-            ),
-            onBackClick = {},
-            onAddToCartClick = {},
-            onBuyNowClick = {}
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun P() {
+//    ClothingShopDatabaseTheme(darkTheme = false) {
+//        ProductScreen(
+//            product =
+//            Product(
+//                1,
+//                "T1 World Champions 2024 T-Shirt",
+//                "Celebrate T1's historic victory at Worlds 2024" +
+//                        " with this limited-edition T-shirt! Made from premium" +
+//                        " cotton, it offers maximum comfort for everyday wear." +
+//                        " The front features the iconic T1 logo along with the" +
+//                        " bold \"World Champions 2024\" text, making it a" +
+//                        " must-have for any true fan. Don't miss out on the " +
+//                        "chance to own a piece of esports history and show your" +
+//                        " support for T1!" +
+//                        "T1 World Champions 2024 T-Shirt" +
+//                        "Celebrate T1's historic victory at Worlds 2024" +
+//                        " with this limited-edition T-shirt! Made from premium" +
+//                        " cotton, it offers maximum comfort for everyday wear." +
+//                        " The front features the iconic T1 logo along with the" +
+//                        " bold \"World Champions 2024\" text, making it a" +
+//                        " must-have for any true fan. Don't miss out on the " +
+//                        "chance to own a piece of esports history and show your" +
+//                        " support for T1!" +
+//                        "T1 World Champions 2024 T-Shirt" +
+//                        "Celebrate T1's historic victory at Worlds 2024" +
+//                        " with this limited-edition T-shirt! Made from premium" +
+//                        " cotton, it offers maximum comfort for everyday wear." +
+//                        " The front features the iconic T1 logo along with the" +
+//                        " bold \"World Champions 2024\" text, making it a" +
+//                        " must-have for any true fan. Don't miss out on the " +
+//                        "chance to own a piece of esports history and show your" +
+//                        " support for T1!" +
+//                        "T1 World Champions 2024 T-Shirt" +
+//                        "Celebrate T1's historic victory at Worlds 2024" +
+//                        " with this limited-edition T-shirt! Made from premium" +
+//                        " cotton, it offers maximum comfort for everyday wear." +
+//                        " The front features the iconic T1 logo along with the" +
+//                        " bold \"World Champions 2024\" text, making it a" +
+//                        " must-have for any true fan. Don't miss out on the " +
+//                        "chance to own a piece of esports history and show your" +
+//                        " support for T1!",
+//                R.drawable.t1_2024_t_shirt_wchampions,
+//                1000000,
+////                listOf(Size.Small, Size.Medium, Size.Large, Size.XLarge, Size.X2Large, Size.X3Large)
+//            ),
+//            onBackClick = {},
+//            onAddToCartClick = {},
+//            onBuyNowClick = {}
+//        )
+//    }
+//}
