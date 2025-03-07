@@ -86,8 +86,12 @@ fun ClothingShopApp(
                 destination = "227 Nguyen Trai Street, W4, D5, HCM City",
                 onOrderClick = {},
                 onBackClick = { navHostController.navigateUp() },
-                onAddItemClick = {},
-                onRemoveItemClick = {}
+                onAddItemClick = { product ->
+                    viewModel.addStock(product)
+                },
+                onRemoveItemClick = {product ->
+                    viewModel.removeStock(product)
+                }
             )
         }
         composable(route = ClothingShopScreen.Show.name + "/{category}") {

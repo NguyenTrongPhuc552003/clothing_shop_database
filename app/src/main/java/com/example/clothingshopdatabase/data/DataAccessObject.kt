@@ -19,4 +19,6 @@ interface DataAccessObject {
     @Query("SELECT * FROM cart_items WHERE category = :category")
     fun getCartItemsByCategory(category: String): Flow<List<CartItem>?>
 
+    @Query("DELETE FROM cart_items")
+    suspend fun clearCart()
 }

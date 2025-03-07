@@ -56,9 +56,9 @@ class ClothingShopViewModel(private val dao: DataAccessObject) : ViewModel() {
         val checkExist = _uiState.value.cartList?.find {
             it.id == product.id && it.size == product.size
         }
-        Log.d("checkExist",checkExist.toString())
+        Log.d("checkExist", checkExist.toString())
         val updateCart = _uiState.value.cartList?.toMutableList()
-        Log.d("updateCart",updateCart.toString())
+        Log.d("updateCart", updateCart.toString())
         if (checkExist != null) {
             updateCart?.set(
                 updateCart.indexOf(checkExist),
@@ -66,15 +66,10 @@ class ClothingShopViewModel(private val dao: DataAccessObject) : ViewModel() {
             )
         } else
             updateCart?.add(product)
-        Log.d("updateCart",updateCart.toString())
+        Log.d("updateCart", updateCart.toString())
         _uiState.value = _uiState.value.copy(cartList = updateCart)
-        Log.d("Size",_uiState.value.cartList.toString())
+        Log.d("Size", _uiState.value.cartList.toString())
     }
-
-    fun findProductByCategory(category: String) =
-        getProducts().map {
-
-        }
 
     fun findProductById(productId: Int?) = dao.getCartItemById(productId).map { cartItem ->
         cartItem?.let {
@@ -86,20 +81,59 @@ class ClothingShopViewModel(private val dao: DataAccessObject) : ViewModel() {
                 image = cartItem.image,
                 price = cartItem.price
             )
-        } ?: Product(-1,".","","","",0)
+        } ?: Product(-1, ".", "", "", "", 0)
     }
+
+    fun addStock(product: Product) {
+        val currentCart = _uiState.value.cartList?.toMutableList() ?: mutableListOf()
+
+        val existingProduct = currentCart.find { it.id == product.id && it.size == product.size }
+
+        if (existingProduct != null) {
+            currentCart[currentCart.indexOf(existingProduct)] =
+                existingProduct.copy(
+                    stock = existingProduct.stock + 1,
+                    totalPrice = (existingProduct.stock + 1) * existingProduct.price
+                )
+
+            _uiState.value = _uiState.value.copy(cartList = currentCart)
+        }
+    }
+
+    fun removeStock(product: Product) {
+        val currentCart = _uiState.value.cartList?.toMutableList() ?: mutableListOf()
+
+        val existingProduct = currentCart.find { it.id == product.id && it.size == product.size }
+
+        if (existingProduct != null) {
+            if (existingProduct.stock > 1) {
+                currentCart[currentCart.indexOf(existingProduct)] =
+                    existingProduct.copy(
+                        stock = existingProduct.stock - 1,
+                        totalPrice = (existingProduct.stock - 1) * existingProduct.price
+                    )
+            } else {
+                currentCart.remove(existingProduct)
+            }
+
+            _uiState.value = _uiState.value.copy(cartList = currentCart)
+        }
+    }
+
 
     fun getSubtotal(): Int =
         _uiState.value.cartList?.sumOf { it.totalPrice } ?: 0
+
     fun getTotalQuantity(): Int =
         _uiState.value.cartList?.sumOf { it.stock } ?: 0
+
     fun getTotal(): Int =
         getSubtotal() + DELIVERY
 
     fun readJsonFromAssets(context: Context, fileName: String): String {
-        Log.d("filename",fileName)
+        Log.d("filename", fileName)
         val result = context.assets.open(fileName).bufferedReader().use { it.readText() }
-        Log.d("readJsonResult",result)
+        Log.d("readJsonResult", result)
         return result
     }
 
@@ -122,11 +156,19 @@ class ClothingShopViewModel(private val dao: DataAccessObject) : ViewModel() {
         }
         return itemList
     }
+
     fun loadDataFromJson(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             val jsonString = readJsonFromAssets(context, "updated_clothings_database.json")
             val clothes = parseJson(jsonString)
-            Log.d("test",jsonString)
+            Log.d("test", jsonString)
             dao.addToCart(clothes)
         }
-    }}
+    }
+
+    fun deleteItems() {
+        viewModelScope.launch {
+            dao.clearCart()
+        }
+    }
+}

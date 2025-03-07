@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
             val viewModel: ClothingShopViewModel =
                 viewModel(factory = ClothingShopAppViewModelFactory(dao))
             val navController = rememberNavController()
+//            viewModel.deleteItems()
 //            viewModel.loadDataFromJson(this)
             ClothingShopDatabaseTheme(darkTheme = false) {
                 ClothingShopApp(

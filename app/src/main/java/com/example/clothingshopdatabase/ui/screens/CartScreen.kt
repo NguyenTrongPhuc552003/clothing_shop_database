@@ -62,8 +62,8 @@ fun CartScreen(
     totalPrice: String,
     departurePoint: String,
     destination: String,
-    onAddItemClick: () -> Unit,
-    onRemoveItemClick: () -> Unit,
+    onAddItemClick: (Product) -> Unit,
+    onRemoveItemClick: (Product) -> Unit,
     onOrderClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -269,13 +269,13 @@ fun OrderSummary(
                     horizontalAlignment = Alignment.End
                 ) {
                     Text(
-                        text = subTotal
+                        text = "${subTotal}đ"
                     )
                     Text(
                         text = totalQuantity
                     )
                     Text(
-                        text = if (totalQuantity != "0") delivery else "0"
+                        text = (if (totalQuantity != "0") delivery else "0") + 'đ'
                     )
                 }
             }
@@ -293,7 +293,7 @@ fun OrderSummary(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = if (totalQuantity != "0") totalPrice else "0",
+                    text = (if (totalQuantity != "0") totalPrice else "0") + 'đ',
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -303,8 +303,8 @@ fun OrderSummary(
 
 @Composable
 fun ItemList(
-    onAddItemClick: () -> Unit,
-    onRemoveItemClick:() -> Unit,
+    onAddItemClick: (Product) -> Unit,
+    onRemoveItemClick:(Product) -> Unit,
     products: List<Product>,
     modifier: Modifier = Modifier
 ) {
@@ -327,8 +327,8 @@ fun ItemList(
                         size = it.size,
                         stock = it.stock,
                         totalPrice = it.formatTotalPrice(),
-                        onSubtractStockClick = onRemoveItemClick,
-                        onAddStockClick = onAddItemClick,
+                        onSubtractStockClick = {onRemoveItemClick(it)},
+                        onAddStockClick = {onAddItemClick(it)},
                     )
                 }
             }
