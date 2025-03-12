@@ -1,6 +1,5 @@
 package com.example.clothingshopdatabase.ui.screens
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Canvas
@@ -43,6 +42,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
@@ -56,16 +56,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.clothingshopdatabase.R
 import com.example.clothingshopdatabase.model.Product
+import com.example.clothingshopdatabase.ui.theme.ClothingShopDatabaseTheme
 
 @Composable
 fun WelcomeScreen(
@@ -236,47 +240,58 @@ fun CustomBottomBar(
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp)
+                .height(56.dp)
         ) {
             val width = size.width
             val height = size.height
-            val cornerRadius = 16.dp.toPx()
-            val curveDepth = 32.dp.toPx()
-            val curveDiameter = 64.dp.toPx()
+            val curveHeight = 40.dp.toPx() // Chiều cao của đường cong
 
-            val path = Path().apply {
-                // Bắt đầu từ góc trái dưới
-                moveTo(0f, height)
-
-                // Vẽ đến góc trái trên
-                lineTo(0f, cornerRadius)
-                quadraticTo(0f, 0f, cornerRadius, 0f)
-
-                // Vẽ đến điểm bắt đầu của phần lõm
-                lineTo(width / 2 - curveDiameter / 2, 0f)
-
-                // Vẽ phần lõm
-                quadraticTo(
-                    width / 2, 0f,  // điểm điều khiển
-                    width / 2, curveDepth  // điểm đích
+            // Vẽ toàn bộ bottom bar
+            val bottomBarPath = Path().apply {
+                moveTo(0f, 0f)
+                lineTo(width * 0.35f, 0f)
+                cubicTo(
+                    width * 0.4f, 0f,
+                    width * 0.4f, curveHeight,
+                    width * 0.5f, curveHeight
                 )
-                quadraticTo(
-                    width / 2, 0f,  // điểm điều khiển
-                    width / 2 + curveDiameter / 2, 0f  // điểm đích
+                cubicTo(
+                    width * 0.6f, curveHeight,
+                    width * 0.6f, 0f,
+                    width * 0.65f, 0f
                 )
-
-                // Vẽ đến góc phải
-                lineTo(width - cornerRadius, 0f)
-                quadraticTo(width, 0f, width, cornerRadius)
-
-                // Hoàn thành path
+                lineTo(width, 0f)
                 lineTo(width, height)
+                lineTo(0f, height)
                 close()
             }
 
+            // Vẽ phần lõm với viền đen
+            val curvePath = Path().apply {
+                moveTo(width * 0.35f, 0f)
+                cubicTo(
+                    width * 0.4f, 0f,
+                    width * 0.4f, curveHeight,
+                    width * 0.5f, curveHeight
+                )
+                cubicTo(
+                    width * 0.6f, curveHeight,
+                    width * 0.6f, 0f,
+                    width * 0.65f, 0f
+                )
+            }
+
+            // Vẽ bottom bar
             drawPath(
-                path = path,
+                path = bottomBarPath,
                 color = Color.White
+            )
+
+            // Vẽ viền đen cho phần lõm
+            drawPath(
+                path = curvePath,
+                color = Color.Black,
+                style = Stroke(width = 0.2.dp.toPx()) // Độ dày của viền
             )
         }
 
@@ -335,7 +350,7 @@ fun CustomBottomBar(
             modifier = Modifier
                 .size(64.dp)
                 .align(Alignment.BottomCenter)
-                .offset(y = (-32).dp)
+                .offset(y = (-10).dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
@@ -581,5 +596,15 @@ private fun ImageBox(
                 .align(Alignment.TopEnd)
                 .padding(8.dp)
         )
+    }
+}
+
+@Preview
+@Composable
+fun DrawBottomBarPreview() {
+    ClothingShopDatabaseTheme(darkTheme = false) {
+        Surface() {
+            CustomBottomBar({},{},{})
+        }
     }
 }
