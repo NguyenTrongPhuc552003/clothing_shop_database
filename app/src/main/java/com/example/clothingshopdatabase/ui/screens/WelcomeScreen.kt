@@ -233,14 +233,16 @@ fun CustomBottomBar(
 ) {
     Box(
         modifier = Modifier
+            .background(Color.Transparent)
             .fillMaxWidth()
             .navigationBarsPadding(),
         contentAlignment = Alignment.BottomCenter
     ) {
         Canvas(
             modifier = Modifier
+                .background(Color.Transparent)
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(80.dp)
         ) {
             val width = size.width
             val height = size.height
@@ -290,7 +292,7 @@ fun CustomBottomBar(
             // Vẽ viền đen cho phần lõm
             drawPath(
                 path = curvePath,
-                color = Color.Black,
+                color = Color.LightGray,
                 style = Stroke(width = 0.2.dp.toPx()) // Độ dày của viền
             )
         }
@@ -303,7 +305,9 @@ fun CustomBottomBar(
             tonalElevation = 8.dp,
             actions = {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .background(Color.Transparent)
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
                     // Nút Cart bên trái
@@ -350,7 +354,7 @@ fun CustomBottomBar(
             modifier = Modifier
                 .size(64.dp)
                 .align(Alignment.BottomCenter)
-                .offset(y = (-10).dp)
+                .offset(y = (-30).dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
@@ -603,7 +607,9 @@ private fun ImageBox(
 @Composable
 fun DrawBottomBarPreview() {
     ClothingShopDatabaseTheme(darkTheme = false) {
-        Surface() {
+        Surface(
+            color = Color.LightGray
+        ) {
             CustomBottomBar({},{},{})
         }
     }
