@@ -9,14 +9,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
@@ -24,6 +26,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -51,16 +54,20 @@ import coil.request.ImageRequest
 import com.example.clothingshopdatabase.R
 import com.example.clothingshopdatabase.model.Product
 import com.example.clothingshopdatabase.model.Size
+import com.example.clothingshopdatabase.ui.components.ConfirmDialog
 
 @Composable
 fun ProductScreen(
     product: Product,
     onAddToCartClick: (Size?) -> Unit,
     onBuyNowClick: (Size?) -> Unit,
+    onUpdateClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var selectedSize by remember { mutableStateOf<Size?>(null) }
+    var isConfirmDialogRequire by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
             ProductTopAppBar(
@@ -91,31 +98,82 @@ fun ProductScreen(
             }
         }
     ) {
-        Column(
+        Box(
             modifier = modifier
                 .padding(it)
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .fillMaxSize()
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                ProductImage(product.image)
-                ProductNameAndPrice(product.name, product.formatPrice())
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = Color(0xffE9E9E9)
-                )
-                Description(
-                    product.description
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    ProductImage(product.image)
+                    ProductNameAndPrice(product.name, product.formatPrice())
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = Color(0xffE9E9E9)
+                    )
+                    Description(
+                        product.description
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                SizeList(
+                    selectedSize = selectedSize,
+                    onSizeClick = { size -> selectedSize = size }
                 )
             }
-            SizeList(
-                selectedSize = selectedSize,
-                onSizeClick = { size -> selectedSize = size }
-            )
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                FloatingActionButton(
+                    onClick = {
+                        onUpdateClick()
+                    },
+                    containerColor = Color(0xFF0F2FE6),
+                    shape = CircleShape
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_edit),
+                        contentDescription = "Update",
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+                FloatingActionButton(
+                    onClick = { isConfirmDialogRequire = true },
+                    containerColor = Color(0xFF0F2FE6) ,
+                    shape = CircleShape
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.remove),
+                        contentDescription = "Delete",
+                        modifier = Modifier.size(25.dp)
+                    )
+                }
+                if(isConfirmDialogRequire){
+                    ConfirmDialog(
+                        text = "Are you sure you want to remove ${product.name}?",
+                        onCancelClick = {
+                            isConfirmDialogRequire = false
+                        },
+                        onConfirmClick = {
+                            isConfirmDialogRequire = false
+                            onDeleteClick()
+                            onBackClick()
+                        }
+                    )
+                }
+            }
         }
     }
 }
@@ -128,7 +186,7 @@ private fun Description(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(320.dp),
+            .heightIn(max = 320.dp),
     ) {
         Text(
             text = stringResource(R.string.description),

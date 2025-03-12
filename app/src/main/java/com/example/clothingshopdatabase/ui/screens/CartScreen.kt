@@ -36,6 +36,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,6 +56,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.clothingshopdatabase.R
 import com.example.clothingshopdatabase.model.Product
+import com.example.clothingshopdatabase.ui.components.ConfirmDialog
 
 @Composable
 fun CartScreen(
@@ -68,6 +73,10 @@ fun CartScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isConfirmDialogRequire by remember { mutableStateOf(false) }
+    val success = stringResource(R.string.success)
+    val thankYou = stringResource(R.string.thank_you)
+    val warning = stringResource(R.string.nothing_to_buy)
     Scaffold(
         topBar = {
             CartTopAppBar(onBackClick = onBackClick)
@@ -83,11 +92,33 @@ fun CartScreen(
                             Color(0xff0F31E6)
                         )
                     ) {
-                        onOrderClick()
+                        isConfirmDialogRequire = true
                     }
                 },
                 containerColor = Color.White
             )
+            if (isConfirmDialogRequire) {
+                if(products.isNotEmpty()) {
+                    ConfirmDialog(
+                        title = success,
+                        text = thankYou,
+                        isAlert = false,
+                        onConfirmClick = {
+                            isConfirmDialogRequire = false
+                            onBackClick()
+                            onOrderClick()
+                        }
+                    )
+                }else{
+                    ConfirmDialog(
+                        text = warning,
+                        isAlert = false,
+                        onConfirmClick = {
+                            isConfirmDialogRequire = false
+                        }
+                    )
+                }
+            }
         }
     ) {
         Column(

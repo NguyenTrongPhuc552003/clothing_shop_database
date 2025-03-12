@@ -56,9 +56,7 @@ class ClothingShopViewModel(private val dao: DataAccessObject) : ViewModel() {
         val checkExist = _uiState.value.cartList?.find {
             it.id == product.id && it.size == product.size
         }
-        Log.d("checkExist", checkExist.toString())
         val updateCart = _uiState.value.cartList?.toMutableList()
-        Log.d("updateCart", updateCart.toString())
         if (checkExist != null) {
             updateCart?.set(
                 updateCart.indexOf(checkExist),
@@ -66,9 +64,7 @@ class ClothingShopViewModel(private val dao: DataAccessObject) : ViewModel() {
             )
         } else
             updateCart?.add(product)
-        Log.d("updateCart", updateCart.toString())
         _uiState.value = _uiState.value.copy(cartList = updateCart)
-        Log.d("Size", _uiState.value.cartList.toString())
     }
 
     fun findProductById(productId: Int?) = dao.getCartItemById(productId).map { cartItem ->
@@ -131,9 +127,7 @@ class ClothingShopViewModel(private val dao: DataAccessObject) : ViewModel() {
         getSubtotal() + DELIVERY
 
     fun readJsonFromAssets(context: Context, fileName: String): String {
-        Log.d("filename", fileName)
         val result = context.assets.open(fileName).bufferedReader().use { it.readText() }
-        Log.d("readJsonResult", result)
         return result
     }
 
@@ -161,7 +155,6 @@ class ClothingShopViewModel(private val dao: DataAccessObject) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val jsonString = readJsonFromAssets(context, "updated_clothings_database.json")
             val clothes = parseJson(jsonString)
-            Log.d("test", jsonString)
             dao.addToCart(clothes)
         }
     }
@@ -170,5 +163,17 @@ class ClothingShopViewModel(private val dao: DataAccessObject) : ViewModel() {
         viewModelScope.launch {
             dao.clearCart()
         }
+    }
+
+    fun removeCartItem(product: Product) {
+        viewModelScope.launch {
+            dao.deleteCartItem(
+                id = product.id
+            )
+        }
+    }
+
+    fun removeProductsFromCart(){
+        _uiState.value = _uiState.value.copy(cartList = emptyList())
     }
 }

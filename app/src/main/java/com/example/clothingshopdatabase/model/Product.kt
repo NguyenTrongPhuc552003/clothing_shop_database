@@ -4,12 +4,12 @@ import java.text.NumberFormat
 import java.util.Locale
 
 data class Product(
-    val id: Int,
-    val name: String,
-    val category: String,
-    val description: String,
-    val image: String,
-    val price: Int,
+    val id: Int = 0,
+    val name: String = "",
+    val category: String = "",
+    val description: String = "",
+    val image: String = "",
+    val price: Int = 0,
     val stock: Int = 1,
     val totalPrice: Int = price * stock,
     val size: String = ""

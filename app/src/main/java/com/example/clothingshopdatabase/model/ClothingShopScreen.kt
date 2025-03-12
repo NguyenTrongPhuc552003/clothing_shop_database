@@ -5,5 +5,7 @@ enum class ClothingShopScreen() {
     Information,
     Product,
     Cart,
-    Show
+    Show,
+    Entry,
+    Update
 }

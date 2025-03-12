@@ -19,14 +19,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             val context = LocalContext.current
             val dao = remember { CartDatabase.getDatabase(context).cartDao() }
-            val viewModel: ClothingShopViewModel =
-                viewModel(factory = ClothingShopAppViewModelFactory(dao))
             val navController = rememberNavController()
 //            viewModel.deleteItems()
 //            viewModel.loadDataFromJson(this)
             ClothingShopDatabaseTheme(darkTheme = false) {
                 ClothingShopApp(
-                    viewModel = viewModel,
+                    dao = dao,
                     navHostController = navController
                 )
             }

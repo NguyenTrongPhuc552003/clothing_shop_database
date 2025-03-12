@@ -28,7 +28,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
@@ -71,7 +71,7 @@ import com.example.clothingshopdatabase.model.Product
 fun WelcomeScreen(
     onInformationClick: () -> Unit,
     onCartClick: () -> Unit,
-    onHomeClick: () -> Unit,
+    onAddProductClick: () -> Unit,
     onItemClick: (Int) -> Unit,
     onAllClick: () -> Unit,
     onTrousersClick: () -> Unit,
@@ -84,7 +84,7 @@ fun WelcomeScreen(
             CustomBottomBar(
                 onInformationClick = onInformationClick,
                 onCartClick = onCartClick,
-                onHomeClick = onHomeClick
+                onAddClick = onAddProductClick
             )
         }
     ) {
@@ -225,7 +225,7 @@ private fun SearchBar() {
 fun CustomBottomBar(
     onCartClick: () -> Unit,
     onInformationClick: () -> Unit,
-    onHomeClick: () -> Unit
+    onAddClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -328,7 +328,7 @@ fun CustomBottomBar(
         )
 
         FloatingActionButton(
-            onClick = onHomeClick,
+            onClick = onAddClick,
             containerColor = Color.Blue,
             contentColor = Color.White,
             shape = CircleShape,
@@ -338,7 +338,7 @@ fun CustomBottomBar(
                 .offset(y = (-32).dp)
         ) {
             Icon(
-                imageVector = Icons.Default.Home,
+                imageVector = Icons.Default.Add,
                 contentDescription = "Home",
                 modifier = Modifier.size(32.dp)
             )
@@ -562,7 +562,6 @@ private fun ImageBox(
             .size(200.dp)
             .fillMaxWidth()
     ) {
-        Log.d("image", item.image)
         AsyncImage(
             modifier = Modifier
                 .fillMaxSize(),

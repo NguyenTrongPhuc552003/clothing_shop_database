@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Clothing Shop Database</string>
+    <string name="app_name">P2q Store</string>
     <string name="tshirt_image">Tshirt Image</string>
     <string name="coats">Coats</string>
     <string name="pants_image">Pants Image</string>
@@ -42,4 +42,20 @@
     <string name="cash">Cash</string>
     <string name="order_now">Order Now</string>
     <string name="my_cart">My Cart</string>
+    <string name="product_entry">Product Entry</string>
+    <string name="product_name">Name</string>
+    <string name="product_price">Price</string>
+    <string name="product_quantity">Quantity</string>
+    <string name="product_description">Description</string>
+    <string name="product_image_link">Image Link</string>
+    <string name="required_fields">*Required Field</string>
+    <string name="save_action">Save</string>
+    <string name="attention">Attention</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="close">Close</string>
+    <string name="success">Success</string>
+    <string name="thank_you">Thank you for choosing our service!</string>
+    <string name="nothing_to_buy">There are no Items in Cart!</string>
+    <string name="product_edit">Product Edit</string>
 </resources>
